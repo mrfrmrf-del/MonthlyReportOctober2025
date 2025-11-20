@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monthly Report Bekasi Area - Oktober 2025</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #e2e8f0; overflow: hidden; }
+    .slides { width: 100vw; height: 100vh; position: relative; }
+    .slide { position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction:column; justify-content:center; align-items:center;
+      opacity:0; transition: opacity 0.8s ease, transform 0.8s ease; transform: translateX(100%); padding: 3rem; }
+    .slide.active { opacity:1; transform: translateX(0); z-index:10; }
+    .slide.prev { transform: translateX(-100%); }
+
+    h1 { font-size: 5.2rem; font-weight:700; background: linear-gradient(90deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:1rem; }
+    h2 { font-size: 3.4rem; margin-bottom:2rem; color:#60a5fa; }
+
+    .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px,1fr)); gap:2.5rem; width:100%; max-width:1600px; margin-bottom:3rem; }
+    .card { background: rgba(30,41,59,0.95); backdrop-filter: blur(12px); border-radius: 1.8rem; padding:3.5rem 2rem; text-align:center; box-shadow: 0 25px 50px rgba(0,0,0,0.4); transition: all 0.4s; }
+    .card:hover { transform: translateY(-20px); box-shadow: 0 40px 80px rgba(59,130,246,0.5); }
+    .branch { font-size:2.5rem; font-weight:600; margin-bottom:1rem; }
+    .value { font-size:3.2rem; font-weight:700; margin:1.2rem 0; }
+    .percent { font-size:1.9rem; font-weight:500; }
+    .positive { color:#34d399; }
+    .negative { color:#f87171; }
+    .neutral { color:#fbbf24; }
+
+    table { width: 92%; max-width: 1400px; border-collapse: collapse; margin: 2rem auto; background: rgba(30,41,59,0.95); border-radius: 1.6rem; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+    th, td { padding: 1.4rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    th { background: rgba(59,130,246,0.5); font-weight: 600; }
+    tr:hover { background: rgba(59,130,246,0.18); }
+    .highlight { color:#34d399; font-weight:700; }
+
+    canvas { max-width: 1000px; margin: 2rem auto; }
+
+    .nav-buttons { position: fixed; bottom: 40px; right: 50px; z-index: 1000; display: flex; gap: 20px; }
+    .nav-btn { width: 70px; height: 70px; background: rgba(59,130,246,0.9); color: white; border: none; border-radius: 50%; font-size: 2.5rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: all 0.3s; backdrop-filter: blur(10px); }
+    .nav-btn:hover { background: #8b5cf6; transform: scale(1.15); }
+    .nav-btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; }
+
+    .footer { position:fixed; bottom:40px; left:50%; transform:translateX(-50%); font-size:1.1rem; color:#64748b; z-index:1000; }
+  </style>
+</head>
+<body>
+
+<div class="slides">
+
+  <!-- 1. Title -->
+  <div class="slide active">
+    <h1>Monthly Report</h1>
+    <h2>Bekasi Area</h2>
+    <p style="font-size:2.4rem; color:#94a3b8; margin-top:2rem;">Periode Oktober 2025</p>
+  </div>
+
+  <!-- 2. Revenue Performance -->
+  <div class="slide">
+    <h2>Revenue Performance</h2>
+    <div class="card-container">
+      <div class="card"><div class="branch">Jatibening</div><div class="value">Rp173.759.300</div><div class="percent neutral">78,98%</div></div>
+      <div class="card"><div class="branch">Summarecon Bekasi</div><div class="value">Rp227.685.657</div><div class="percent positive">108,42%</div></div>
+      <div class="card"><div class="branch">Cikarang</div><div class="value">Rp115.584.448</div><div class="percent neutral">96,32%</div></div>
+    </div>
+    <canvas id="revenueChart"></canvas>
+  </div>
+
+  <!-- 3. Profit Performance -->
+  <div class="slide">
+    <h2>Profit Performance</h2>
+    <div class="card-container">
+      <div class="card"><div class="branch">Jatibening</div><div class="value">Rp4.579.699</div><div class="percent neutral">5,09%</div></div>
+      <div class="card"><div class="branch">Summarecon Bekasi</div><div class="value">Rp46.741.072</div><div class="percent positive">66,77%</div></div>
+      <div class="card"><div class="branch">Cikarang</div><div class="value">Rp1.928.396</div><div class="percent neutral">5,01%</div></div>
+    </div>
+    <canvas id="profitChart"></canvas>
+  </div>
+
+  <!-- 4. Expenses Performance -->
+  <div class="slide">
+    <h2>Expenses Performance</h2>
+    <div class="card-container">
+      <div class="card"><div class="branch">Jatibening</div><div class="value">Rp5.553.338</div><div class="percent neutral">3,39%</div></div>
+      <div class="card"><div class="branch">Summarecon Bekasi</div><div class="value">-Rp34.609.936</div><div class="percent positive">-16,06%</div></div>
+      <div class="card"><div class="branch">Cikarang</div><div class="value">-Rp34.627.809</div><div class="percent positive">-23,35%</div></div>
+    </div>
+    <canvas id="expensesChart"></canvas>
+  </div>
+
+  <!-- 5. Ringkasan 3 Cabang -->
+  <div class="slide">
+    <h2>Ringkasan 3 Cabang</h2>
+    <table>
+      <tr><th>Cabang</th><th>Transaksi</th><th>Total Nominal</th><th>Reguler</th><th>Private</th><th>Rata-rata/Transaksi</th></tr>
+      <tr><td>Jatibening</td><td>101</td><td>Rp152.967.952</td><td>95%</td><td>5%</td><td>Rp1.514.000</td></tr>
+      <tr class="highlight"><td>Summarecon Bekasi</td><td>73</td><td>Rp197.447.497</td><td>73%</td><td>27%</td><td class="positive">Rp2.704.000</td></tr>
+      <tr><td>Cikarang</td><td>46</td><td>Rp111.135.017</td><td>72%</td><td>28%</td><td>Rp2.416.000</td></tr>
+      <tr style="background:rgba(59,130,246,0.6);"><td><strong>TOTAL</strong></td><td><strong>220</strong></td><td><strong>Rp461.550.466</strong></td><td colspan="3" style="text-align:center;"><strong>Growth Engine Bekasi!</strong></td></tr>
+    </table>
+    <canvas id="summaryChart"></canvas>
+  </div>
+
+  <!-- 6. Jatibening Detail -->
+  <div class="slide">
+    <h2>Jatibening - Detail</h2>
+    <div class="card-container">
+      <div class="card"><div class="branch">Reguler</div><div class="value">95 transaksi</div><div class="percent neutral">94,06%</div></div>
+      <div class="card"><div class="branch">Private</div><div class="value">6 transaksi</div><div class="percent neutral">5,94%</div></div>
+    </div>
+    <table>
+      <tr><th>Top Paket Reguler</th><th>Transaksi</th></tr>
+      <tr><td>English for Children</td><td>31</td></tr>
+      <tr><td>English for Teenagers</td><td>24</td></tr>
+      <tr><td>Speak On</td><td>19</td></tr>
+    </table>
+    <canvas id="jatiChart"></canvas>
+  </div>
+
+  <!-- 7. Summarecon Bekasi Detail -->
+  <div class="slide">
+    <h2>Summarecon Bekasi - The Star</h2>
+    <div class="card-container">
+      <div class="card"><div class="branch">Reguler</div><div class="value">53 transaksi</div><div class="percent positive">73%</div></div>
+      <div class="card"><div class="branch">Private</div><div class="value">20 transaksi</div><div class="percent neutral">27%</div></div>
+    </div>
+    <table>
+      <tr><th>Top Paket</th><th>Nominal</th></tr>
+      <tr><td>Speak On</td><td>Rp93.248.937</td></tr>
+      <tr><td>English for Teenagers</td><td>Rp20.035.560</td></tr>
+      <tr><td>IELTS Pro</td><td>Rp8.707.362</td></tr>
+    </table>
+    <canvas id="summaChart"></canvas>
+  </div>
+
+  <!-- 8. Cikarang Detail -->
+  <div class="slide">
+    <h2>Cikarang - Private Test Prep Kuat</h2>
+    <div class="card-container">
+      <div class="card"><div class="branch">Reguler</div><div class="value">33 transaksi</div><div class="percent positive">72%</div></div>
+      <div class="card"><div class="branch">Private</div><div class="value">13 transaksi</div><div class="percent neutral">28%</div></div>
+    </div>
+    <table>
+      <tr><th>Top Private</th><th>Nominal</th></tr>
+      <tr><td>IELTS Pro</td><td>Rp24.645.602</td></tr>
+      <tr><td>TOEFL ITP Pro</td><td>Rp11.400.000</td></tr>
+      <tr><td>Active Communication</td><td>Rp6.454.686</td></tr>
+    </table>
+    <canvas id="cikChart"></canvas>
+  </div>
+
+  <!-- 9. Staff Performance -->
+  <div class="slide">
+    <h2>Individual Performance</h2>
+    <table>
+      <tr><th>Staff</th><th>Hasil</th><th>% Target</th></tr>
+      <tr><td class="highlight">Amalia</td><td>Rp92.277.299</td><td class="positive">115,35%</td></tr>
+      <tr><td class="highlight">Nadya</td><td>Rp85.812.791</td><td class="positive">107,27%</td></tr>
+      <tr><td>Dian</td><td>Rp65.305.615</td><td class="positive">>100%</td></tr>
+      <tr><td>Dhea</td><td>Rp56.626.012</td><td>-</td></tr>
+      <tr><td>Rafi</td><td>Rp53.031.325</td><td class="neutral">66,29%</td></tr>
+      <tr><td>Cemara</td><td>Rp50.123.586</td><td class="neutral">62,65%</td></tr>
+      <tr><td>Zul</td><td>Rp46.665.564</td><td class="neutral">58,33%</td></tr>
+      <tr><td>Nurul</td><td>Rp44.723.328</td><td>-</td></tr>
+    </table>
+    <canvas id="staffChart"></canvas>
+  </div>
+
+  <!-- 10. Operations Update -->
+  <div class="slide">
+    <h2>Operations Update</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; width:90%;">
+      <div style="background:rgba(34,197,94,0.15); padding:3rem; border-radius:2rem; border:2px solid #34d399;">
+        <h3 style="color:#34d399; font-size:2.4rem;">✅ Already Done</h3>
+        <ul style="font-size:1.8rem; line-height:2.8rem; margin-top:1.5rem;">
+          <li>Perizinan Operasional GE Summarecon Bekasi</li>
+          <li>SOP After Sales</li>
+          <li>CRM Handbook + Template Message</li>
+          <li>Golden Star Student Program</li>
+        </ul>
+      </div>
+      <div style="background:rgba(139,92,246,0.15); padding:3rem; border-radius:2rem; border:2px solid #8b5cf6;">
+        <h3 style="color:#8b5cf6; font-size:2.4rem;">🎯 November Plan</h3>
+        <ul style="font-size:1.8rem; line-height:2.8rem; margin-top:1.5rem;">
+          <li>Pengurusan NPSN</li>
+          <li>Pameran Kursus Disdik</li>
+          <li>Lomba Pidato Bahasa Inggris</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. Closing -->
+  <div class="slide">
+    <h1>Terima Kasih!</h1>
+    <p style="font-size:6.5rem; color:#34d399; margin:3rem 0; font-weight:700;">Rp461,55 JUTA</p>
+    <p style="font-size:3.2rem; margin:2rem 0;">Summarecon Bekasi = Growth Engine #1</p>
+    <p style="font-size:4.5rem; color:#8b5cf6; margin:4rem 0; font-weight:700;">November Target: Rp550 Juta!</p>
+    <p style="font-size:2.2rem; color:#94a3b8;">Bersama kita pasti bisa!</p>
+  </div>
+
+</div>
+
+<!-- Tombol Navigasi -->
+<div class="nav-buttons">
+  <button class="nav-btn" id="prevBtn">←</button>
+  <button class="nav-btn" id="nextBtn">→</button>
+</div>
+
+<div class="footer">Bekasi Area Monthly Report – Oktober 2025 • Final Version</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  function showSlide(n) {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === current) s.classList.add('prev');
+    });
+    slides[n].classList.add('active');
+    current = n;
+    updateButtons();
+    renderCharts();
+  }
+
+  function nextSlide() { if (current < slides.length - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  function updateButtons() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+  function renderCharts() {
+    // Revenue, Profit, Expenses
+    ['revenueChart','profitChart','expensesChart'].forEach((id, i) => {
+      if (document.getElementById(id) && !document.getElementById(id).dataset.rendered) {
+        const data = i===0 ? [173759300,227685657,115584448] : i===1 ? [4579699,46741072,1928396] : [5553338,-34609936,-34627809];
+        const color = i===0 ? '#8b5cf6' : i===1 ? '#34d399' : '#f87171';
+        new Chart(document.getElementById(id), {type:'bar', data:{labels:['Jatibening','Summarecon','Cikarang'], datasets:[{data:data, backgroundColor:color}]}, options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}});
+        document.getElementById(id).dataset.rendered = 'true';
+      }
+    });
+
+    // Summary Chart
+    if (document.getElementById('summaryChart') && !document.getElementById('summaryChart').dataset.rendered) {
+      new Chart(document.getElementById('summaryChart'), {type:'bar', data:{labels:['Jatibening','Summarecon','Cikarang'], datasets:[{data:[152967952,197447497,111135017], backgroundColor:['#60a5fa','#34d399','#8b5cf6']}]}, options:{plugins:{legend:{display:false}}}});
+      document.getElementById('summaryChart').dataset.rendered = 'true';
+    }
+
+    // Staff Chart
+    if (document.getElementById('staffChart') && !document.getElementById('staffChart').dataset.rendered) {
+      new Chart(document.getElementById('staffChart'), {type:'horizontalBar', data:{labels:['Amalia','Nadya','Dian','Dhea','Rafi','Cemara','Zul','Nurul'], datasets:[{data:[92277299,85812791,65305615,56626012,53031325,50123586,46665564,44723328], backgroundColor:'#8b5cf6'}]}, options:{plugins:{legend:{display:false}}}});
+      document.getElementById('staffChart').dataset.rendered = 'true';
+    }
+
+    // Doughnut Cabang
+    ['jatiChart','summaChart','cikChart'].forEach((id,i) => {
+      if (document.getElementById(id) && !document.getElementById(id).dataset.rendered) {
+        const vals = [[95,6],[53,20],[33,13]][i];
+        new Chart(document.getElementById(id), {type:'doughnut', data:{labels:['Reguler','Private'], datasets:[{data:vals, backgroundColor:['#34d399','#ec4899']}]}, options:{plugins:{legend:{position:'bottom'}}}});
+        document.getElementById(id).dataset.rendered = 'true';
+      }
+    });
+  }
+
+  updateButtons();
+  renderCharts();
+</script>
+</body>
+</html>
